@@ -1,0 +1,37 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#Prophet
+from prophet import Prophet
+
+
+# Load the dataset
+data = pd.read_csv("/content/EW-MAX[1].csv")
+
+# Explore the data
+print(data.head())
+print(data.info())
+
+# Prepare the data for Prophet
+data = data.rename(columns={'Date': 'ds', 'Close': 'y'})
+data['ds'] = pd.to_datetime(data['ds'])
+
+
+# Initialize and fit the model
+model = Prophet()
+model.fit(data)
+
+
+# Making predictions
+future = model.make_future_dataframe(periods=30)
+forecast = model.predict(future)
+
+
+
+
+# Plot the forecast
+fig = model.plot(forecast)
+plt.title('Stock Price Prediction')
+plt.xlabel('Date')
+plt.ylabel('Stock Price')
+plt.show()
